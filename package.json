@@ -1,0 +1,21 @@
+{
+  "name": "office-hours-mysql-july-2020",
+  "version": "1.0.0",
+  "description": "Command line app to interact with school database. This is a chance to practice with Node, MySQL, and joins.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/median-man/office-hours-mysql-july-2020.git"
+  },
+  "keywords": [],
+  "author": "John Desrosiers <john.desro@gmail.com> (https://github.com/median-man)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/median-man/office-hours-mysql-july-2020/issues"
+  },
+  "homepage": "https://github.com/median-man/office-hours-mysql-july-2020#readme"
+}
