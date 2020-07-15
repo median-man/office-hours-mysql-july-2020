@@ -42,11 +42,11 @@ function mainMenu() {
     .then((answer) => {
       if (answer.action === VIEW_STUDENTS) {
         return viewStudents();
-      } else if (answer.action === UPDATE_STUDENT_CLASS) {
-        return updateStudentClass();
-      } else {
-        connection.end();
       }
+      if (answer.action === UPDATE_STUDENT_CLASS) {
+        return updateStudentClass();
+      }
+      connection.end();
     })
     .catch((error) => {
       console.log(error);
