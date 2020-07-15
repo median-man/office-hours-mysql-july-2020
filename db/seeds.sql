@@ -6,4 +6,4 @@ INSERT INTO students (firstName, lastName, classId)
     ("Jessica", "Blankemeier", 1),
     ("Lisbeth", "Machado", 3),
     ("David", "Naimi", 3),
-    ("Shelby", "Rothman", 4); 
+    ("Shelby", "Rothman", 4);
