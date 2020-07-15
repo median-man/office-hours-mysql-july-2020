@@ -26,7 +26,9 @@ connection.connect((err) => {
   }
 });
 
+// List of constants for the different main menu action options
 const VIEW_STUDENTS = "View Students";
+const UPDATE_STUDENT_CLASS = "Update student class";
 
 // display menu of user actions
 function mainMenu() {
@@ -35,11 +37,13 @@ function mainMenu() {
       name: "action",
       type: "list",
       message: "Choose a task:",
-      choices: [VIEW_STUDENTS, "EXIT"],
+      choices: [VIEW_STUDENTS, UPDATE_STUDENT_CLASS, "EXIT"],
     })
     .then((answer) => {
       if (answer.action === VIEW_STUDENTS) {
         return viewStudents();
+      } else if (answer.action === UPDATE_STUDENT_CLASS) {
+        return updateStudentClass();
       } else {
         connection.end();
       }
@@ -48,11 +52,11 @@ function mainMenu() {
       console.log(error);
       connection.end();
     });
-  }
-  
-  function viewStudents() {
-    // query db for students joined with classes and departments
-    const sqlString = `
+}
+
+function viewStudents() {
+  // query db for students joined with classes and departments
+  const sqlString = `
       SELECT
         CONCAT(students.firstName, " ", students.lastName) AS Name,
         classes.title AS Class,
@@ -61,24 +65,62 @@ function mainMenu() {
       INNER JOIN classes ON students.classId = classes.id
       INNER JOIN departments ON classes.deptId = departments.id;
     `;
-    connection.query(sqlString, (error, results) => {
-      // display the results a formatted table
-      if (error) {
-        throw error;
-      }
-      console.table(results);
-      // go back to the menu
-      mainMenu();
-    });
-
+  connection.query(sqlString, (error, results) => {
+    // display the results a formatted table
+    if (error) {
+      throw error;
+    }
+    console.table(results);
+    // go back to the menu
+    mainMenu();
+  });
 }
 
-/* 
-Display students with department and class
-
-SELECT CONCAT(students.firstName, " ", students.lastName) AS name, 	classes.title AS class, departments.title AS department
-FROM students
-INNER JOIN classes ON students.classId = classes.id
-INNER JOIN departments ON classes.deptId = departments.id;
-
-*/
+function updateStudentClass() {
+  // get all the students
+  const studentsSql = `
+    SELECT
+      students.id AS ID,
+      CONCAT(students.firstName, " ", students.lastName) AS Name,
+      classes.title AS Class,
+      departments.title AS Department
+    FROM students
+    INNER JOIN classes ON students.classId = classes.id
+    INNER JOIN departments ON classes.deptId = departments.id;
+  `;
+  connection.query(studentsSql, (error, studentRows) => {
+    // display the results a formatted table
+    if (error) {
+      throw error;
+    }
+    console.table(studentRows);
+    inquirer
+      .prompt({
+        name: "studentId",
+        type: "input",
+        message: "Enter student id:",
+      })
+      .then((studentChoiceAnswers) => {
+        connection.query("SELECT * FROM classes;", (error, results) => {
+          console.table(results);
+          inquirer
+            .prompt({
+              name: "classId",
+              type: "input",
+              message: "Enter class id:",
+            })
+            .then((classChoiceAnswers) => {
+              const studentId = studentChoiceAnswers.studentId;
+              const classId = classChoiceAnswers.classId;
+              connection.query(
+                "UPDATE students SET classId = ? WHERE id = ?;",
+                [classId, studentId],
+                (error, results) => {
+                  mainMenu();
+                }
+              );
+            });
+        });
+      });
+  });
+}
