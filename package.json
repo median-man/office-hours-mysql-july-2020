@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/median-man/office-hours-mysql-july-2020/issues"
   },
-  "homepage": "https://github.com/median-man/office-hours-mysql-july-2020#readme"
+  "homepage": "https://github.com/median-man/office-hours-mysql-july-2020#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.2",
+    "mysql": "^2.18.1"
+  }
 }
